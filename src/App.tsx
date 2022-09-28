@@ -14,8 +14,9 @@ function App() {
   const [selectedBigSearchItemId, setSelectedBigSearchItemId] = useState<
     BigSearchItemIds | undefined
   >();
-  const [month, setMonth] =
-    useState<{ month: NumDaysInMonth; year: number }[]>();
+  const [selectedMonths, setMonth] = useState<
+    { month: NumDaysInMonth; year: number }[] | undefined
+  >();
 
   const handleSelectBigSearchItem = (e: ChangeEvent<HTMLElement>) => {
     setSelectedBigSearchItemId(e.target.id as BigSearchItemIds);
@@ -56,7 +57,7 @@ function App() {
 
         {showBigSearch ? (
           <BigSearch
-            month={month}
+            selectedMonths={selectedMonths}
             selectedBigSearchItemId={selectedBigSearchItemId}
             setSelectedBigSearchItemId={setSelectedBigSearchItemId}
             handleSelectBigSearchItem={handleSelectBigSearchItem}

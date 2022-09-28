@@ -1,4 +1,10 @@
-import { ChangeEvent, Dispatch, EventHandler, SetStateAction } from 'react';
+import {
+  ChangeEvent,
+  Dispatch,
+  EventHandler,
+  SetStateAction,
+  useState,
+} from 'react';
 import {
   BigSearchItemLabel,
   BigSearchItemText,
@@ -7,22 +13,31 @@ import {
 import SearchDestinationContextMenu from './SearchDestinationContextMenu';
 import Calendar from '../../Calendar';
 import AddGuestsContextMenu from './AddGuestsContextMenu';
-import { BigSearchItemIds, NumDaysInMonth } from '../../../@types/types';
+import {
+  BigSearchItemIds,
+  CheckInCheckOutContextMenuTabs,
+  NumDaysInMonth,
+} from '../../../@types/types';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import CheckInCheckOutContextMenu from './CheckInCheckOutContextMenu';
+import FlexibleMenu from './FlexibleMenu';
 
 const BigSearch = ({
   selectedBigSearchItemId,
   setSelectedBigSearchItemId,
-  month,
+  selectedMonths,
   handleSelectBigSearchItem,
 }: {
   selectedBigSearchItemId: BigSearchItemIds | undefined;
   setSelectedBigSearchItemId: Dispatch<
     SetStateAction<BigSearchItemIds | undefined>
   >;
-  month: { month: NumDaysInMonth; year: number }[];
+  selectedMonths: { month: NumDaysInMonth; year: number }[] | undefined;
   handleSelectBigSearchItem: EventHandler<ChangeEvent>;
 }) => {
+  const [selectedCheckInOptionTab, setSelectedCheckInOptionTab] =
+    useState<CheckInCheckOutContextMenuTabs>('Choose Dates');
+
   return (
     <div className='relative pb-3 pt-2 flex justify-center'>
       <div
@@ -63,7 +78,17 @@ const BigSearch = ({
               <BigSearchItemText>Any Dates</BigSearchItemText>
             </BigSearchItemWrapper>
             {selectedBigSearchItemId === BigSearchItemIds.check_in ? (
-              <Calendar className='-translate-x-64' month={month} />
+              <CheckInCheckOutContextMenu
+                selectedCheckInOptionTab={selectedCheckInOptionTab}
+                setSelectedCheckInOptionTab={setSelectedCheckInOptionTab}
+                className='-translate-x-64'
+              >
+                {selectedCheckInOptionTab === 'Choose Dates' ? (
+                  <Calendar selectedMonths={selectedMonths} />
+                ) : (
+                  <FlexibleMenu />
+                )}
+              </CheckInCheckOutContextMenu>
             ) : null}
           </div>
 
@@ -77,7 +102,17 @@ const BigSearch = ({
               <BigSearchItemText>Any Dates</BigSearchItemText>
             </BigSearchItemWrapper>
             {selectedBigSearchItemId === BigSearchItemIds.check_out ? (
-              <Calendar className='-translate-x-96' month={month} />
+              <CheckInCheckOutContextMenu
+                selectedCheckInOptionTab={selectedCheckInOptionTab}
+                setSelectedCheckInOptionTab={setSelectedCheckInOptionTab}
+                className='-translate-x-96'
+              >
+                {selectedCheckInOptionTab === 'Choose Dates' ? (
+                  <Calendar selectedMonths={selectedMonths} />
+                ) : (
+                  <FlexibleMenu />
+                )}
+              </CheckInCheckOutContextMenu>
             ) : null}
           </div>
 

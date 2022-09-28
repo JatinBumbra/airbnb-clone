@@ -42,3 +42,26 @@ export const SearchDestinationContextMenuOptions = [
 ] as const;
 export type SearchDestinationContextMenuOptions =
   typeof SearchDestinationContextMenuOptions[keyof typeof SearchDestinationContextMenuOptions];
+
+export const CheckInCheckOutContextMenuTabs = [
+  'Choose Dates',
+  `I'm Flexible`,
+] as const;
+export type CheckInCheckOutContextMenuTabs =
+  typeof CheckInCheckOutContextMenuTabs[keyof typeof CheckInCheckOutContextMenuTabs];
+
+export const Months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+] as const;
+export type Months = typeof Months[keyof typeof Months];
