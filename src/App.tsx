@@ -1,4 +1,4 @@
-import { EventHandler, ReactEventHandler, ReactNode, useState } from 'react';
+import { ChangeEvent, ReactEventHandler, ReactNode, useState } from 'react';
 import AirbnbLogo from './assets/airbnb.svg';
 import {
   MagnifyingGlassIcon,
@@ -12,17 +12,24 @@ const BigSearchItemWrapper = ({
   id = '',
   className = '',
   onClick,
+  active,
 }: {
   children: ReactNode;
   id?: string;
+  active?: boolean;
   className?: string;
   onClick?: ReactEventHandler;
 }) => (
   <div
-    id={id}
-    className={`p-2 px-8 hover:bg-neutral-200 rounded-full border border-transparent transition-all cursor-pointer active:bg-white active:shadow-2xl active:border-neutral-200 ${className}`}
-    onClick={onClick}
+    className={`relative p-2 px-8 rounded-full border border-transparent transition-all cursor-pointer ${
+      active ? 'bg-white shadow-2xl border-neutral-200' : 'hover:bg-neutral-200'
+    } ${className}`}
   >
+    <div
+      id={id}
+      className='absolute w-full h-full top-0 left-0'
+      onClick={onClick}
+    ></div>
     {children}
   </div>
 );
@@ -43,12 +50,13 @@ type BIG_SEARCH_ITEM_IDS =
   typeof BIG_SEARCH_ITEM_IDS[keyof typeof BIG_SEARCH_ITEM_IDS];
 
 function App() {
-  const [showSeach, setShowSeach] = useState<boolean>(false);
-  const [selectedBigSearchItemId, setSelectedBigSearchItemId] =
-    useState<BIG_SEARCH_ITEM_IDS>('where');
+  const [showBigSearch, setShowBigSearch] = useState<boolean>(false);
+  const [selectedBigSearchItemId, setSelectedBigSearchItemId] = useState<
+    BIG_SEARCH_ITEM_IDS | undefined
+  >();
 
-  const handleSelectBigSearchItem = (e: any) => {
-    console.log('e.target.value', e.target.value);
+  const handleSelectBigSearchItem = (e: ChangeEvent<HTMLElement>) => {
+    setSelectedBigSearchItemId(e.target.id as BIG_SEARCH_ITEM_IDS);
   };
 
   return (
@@ -57,9 +65,9 @@ function App() {
         <div className='py-5 px-20 flex items-center justify-between text-sm font-semibold'>
           <img src={AirbnbLogo} alt='' className='h-8' />
           <div
-            onClick={() => setShowSeach(true)}
+            onClick={() => setShowBigSearch(true)}
             className={`flex items-center rounded-full border shadow p-2 transition-all cursor-pointer absolute bg-white left-1/2 -translate-x-1/2 ${
-              !showSeach ? 'scale-100' : 'scale-0'
+              !showBigSearch ? 'scale-100' : 'scale-0'
             } hover:shadow-md`}
           >
             {['Anywhere', 'Any Week', 'Add guests'].map((item) => (
@@ -72,7 +80,7 @@ function App() {
 
           <div
             className={`flex items-center p-2 transition-all absolute left-1/2 -translate-x-1/2 space-x-8 text-base font-medium ${
-              showSeach ? 'scale-100' : 'scale-0'
+              showBigSearch ? 'scale-100' : 'scale-0'
             }`}
           >
             {['Stays', 'Experiences', 'Online Experiences'].map((item) => (
@@ -105,13 +113,22 @@ function App() {
           </div>
         </div>
 
-        {showSeach ? (
-          <div className='pb-3 pt-2 flex justify-center'>
-            <div className='group'>
-              <div className='border border-neutral-300 rounded-full flex items-center group-active:bg-neutral-200'>
+        {showBigSearch ? (
+          <div className='relative pb-3 pt-2 flex justify-center'>
+            <div
+              className='absolute top-0 left-0 w-full h-full'
+              onClick={() => setSelectedBigSearchItemId(undefined)}
+            ></div>
+            <div className='group z-10'>
+              <div
+                className={`border border-neutral-300 rounded-full flex items-center ${
+                  selectedBigSearchItemId ? 'bg-neutral-200' : ''
+                }`}
+              >
                 <BigSearchItemWrapper
                   id={BIG_SEARCH_ITEM_IDS.where}
                   onClick={handleSelectBigSearchItem}
+                  active={selectedBigSearchItemId === BIG_SEARCH_ITEM_IDS.where}
                 >
                   <BigSearchItemLabel>Where</BigSearchItemLabel>
                   <input
@@ -124,6 +141,9 @@ function App() {
                 <BigSearchItemWrapper
                   id={BIG_SEARCH_ITEM_IDS.check_in}
                   onClick={handleSelectBigSearchItem}
+                  active={
+                    selectedBigSearchItemId === BIG_SEARCH_ITEM_IDS.check_in
+                  }
                 >
                   <BigSearchItemLabel>Check In</BigSearchItemLabel>
                   <BigSearchItemText>Any Dates</BigSearchItemText>
@@ -132,6 +152,9 @@ function App() {
                 <BigSearchItemWrapper
                   id={BIG_SEARCH_ITEM_IDS.check_out}
                   onClick={handleSelectBigSearchItem}
+                  active={
+                    selectedBigSearchItemId === BIG_SEARCH_ITEM_IDS.check_out
+                  }
                 >
                   <BigSearchItemLabel>Check Out</BigSearchItemLabel>
                   <BigSearchItemText>Any Dates</BigSearchItemText>
@@ -140,6 +163,7 @@ function App() {
                 <BigSearchItemWrapper
                   id={BIG_SEARCH_ITEM_IDS.who}
                   onClick={handleSelectBigSearchItem}
+                  active={selectedBigSearchItemId === BIG_SEARCH_ITEM_IDS.who}
                   className='pr-2'
                 >
                   <div className='flex items-center'>
@@ -149,9 +173,9 @@ function App() {
                     </div>
                     <div className='flex items-center bg-red-500 rounded-full text-white font-semibold transition-all hover:bg-red-600'>
                       <MagnifyingGlassIcon className='w-11 h-11 p-3 rounded-full' />
-                      <p className='pr-6 hidden transition-all group-active:block'>
-                        Search
-                      </p>
+                      {selectedBigSearchItemId ? (
+                        <p className='pr-8'>Search</p>
+                      ) : null}
                     </div>
                   </div>
                 </BigSearchItemWrapper>
@@ -160,10 +184,10 @@ function App() {
           </div>
         ) : null}
       </header>
-      {showSeach ? (
+      {showBigSearch ? (
         <div
           className='bg-black fixed top-0 left-0 h-screen w-screen bg-opacity-30'
-          onClick={() => setShowSeach(false)}
+          onClick={() => setShowBigSearch(false)}
         ></div>
       ) : null}
     </div>
