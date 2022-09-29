@@ -5,6 +5,8 @@ const Calendar = ({
 }: {
   selectedMonths: { month: NumDaysInMonth; year: number }[] | undefined;
 }) => {
+  const today = new Date();
+
   const getCalendar = (month: NumDaysInMonth, year: number) => {
     const date = new Date();
     date.setDate(1);
@@ -21,6 +23,14 @@ const Calendar = ({
       start++;
     }
     return array;
+  };
+
+  const formatDate = (date: number, month: number, year: number) => {
+    const newdate = new Date();
+    newdate.setDate(date);
+    newdate.setMonth(month);
+    newdate.setFullYear(year);
+    return newdate;
   };
 
   return (
@@ -45,8 +55,13 @@ const Calendar = ({
                 key={i}
                 className={`flex items-center justify-center rounded-full border-2 border-transparent h-12 w-12 ${
                   date ? 'hover:border-black cursor-pointer' : ''
+                } ${
+                  formatDate(date, month, year) < today
+                    ? 'hover:border-transparent bg-neutral-100 text-neutral-400 cursor-auto'
+                    : ''
                 }`}
               >
+                {console.log(formatDate(date, month, year), today)}
                 {date}
               </p>
             ))}
