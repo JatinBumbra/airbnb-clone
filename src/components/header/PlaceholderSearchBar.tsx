@@ -16,7 +16,12 @@ const PlaceholderSearchBar = ({
       } hover:shadow-md`}
     >
       {['Anywhere', 'Any Week', 'Add guests'].map((item) => (
-        <p className='px-4 py-1 border-r border-neutral-300' key={item}>
+        <p
+          className={`px-4 py-1 border-r ${
+            item === 'Add guests' ? 'border-transparent' : 'border-neutral-300'
+          }`}
+          key={item}
+        >
           {item}
         </p>
       ))}
