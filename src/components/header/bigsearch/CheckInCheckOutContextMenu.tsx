@@ -44,7 +44,7 @@ const CheckInCheckOutContextMenu = ({
           >
             Exact Dates
           </div>
-          {['1', '2', '3', '7'].map((day) => (
+          {[1, 2, 3, 7].map((day) => (
             <div
               key={day}
               className='p-1 px-3 border rounded-full transition-all cursor-pointer hover:border-black active:scale-90'

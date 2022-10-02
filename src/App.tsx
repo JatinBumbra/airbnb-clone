@@ -19,7 +19,9 @@ function App() {
   >();
 
   const handleSelectBigSearchItem = (e: ChangeEvent<HTMLElement>) => {
-    setSelectedBigSearchItemId(e.target.id as BigSearchItemIds);
+    if (selectedBigSearchItemId === e.target.id)
+      setSelectedBigSearchItemId(undefined);
+    else setSelectedBigSearchItemId(e.target.id as BigSearchItemIds);
   };
 
   useEffect(() => {
@@ -45,7 +47,7 @@ function App() {
   return (
     <div className='h-screen bg-neutral-200'>
       <header className='border-b border-neutral-300 bg-white relative z-10'>
-        <div className='py-5 px-20 flex items-center justify-between text-sm font-semibold'>
+        <div className='py-4 px-10 flex items-center justify-between text-sm font-semibold'>
           <img src={AirbnbLogo} alt='' className='h-8' />
           <PlaceholderSearchBar
             showBigSearch={showBigSearch}
