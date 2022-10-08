@@ -45,7 +45,7 @@ function App() {
   };
 
   return (
-    <div className='h-screen bg-neutral-200'>
+    <div className='h-screen bg-red-200'>
       <header className='border-b border-neutral-300 bg-white relative z-10'>
         <div className='py-4 px-10 flex items-center justify-between text-sm font-semibold'>
           <img src={AirbnbLogo} alt='' className='h-8' />
@@ -72,6 +72,19 @@ function App() {
           onClick={() => setShowBigSearch(false)}
         ></div>
       ) : null}
+      <main>
+        <div className='flex items-center justify-center mt-24'>
+          <div className='bg-white p-6 rounded-xl max-w-md space-y-4 shadow-md'>
+            <p className='font-bold text-red-500 text-3xl'>Work in Progress!</p>
+            <p>
+              I intend to create the clone the entire UI of AirBnb just for fun
+              and practice but it'll take a lot a time. I might even decide to
+              drop it midway.
+            </p>
+            <p>Right now, only about 90% of the header is done.</p>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
